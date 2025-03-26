@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    {% block content %}
+    <h1>HOME home.html</h1>
+    {% if request.user.is_authenticated %}
+    You're logged in as {{ request.user }}
+    <br>
+    You can:
+    <ul>
+        <a href="/list/">
+            <li>View List</li>
+        </a>
+        <a href="/create/">
+            <li>Create New Model Post (Login required)</li>
+        </a>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info">Logout</button>
+        </form>
+    </ul>
+    {% else %}
+    You can:
+    <ul>
+        <a href="/list/">
+            <li>View List</li>
+        </a>
+        <a href="/create/">
+            <li>Create New Model Post (Login required)</li>
+        </a>
+        <a href="/login/">
+            <li>Login</li>
+        </a>
+    </ul>
+    {% endif %}
+    {% endblock content %}
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+{% comment %} {% include 'include/nav.html' %} {% endcomment %}
+{% include 'include/css.html' %}
+{% include 'include/js.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>W</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <canvas></canvas>
+        {% block content %}
+        {% endblock content %}
+        <script>
+            const canv = document.querySelector("canvas");
+            const cxk = canv.getContext("2d");
+    
+            function setCanvasFullScreen() {
+                canv.width = window.innerWidth;
+                canv.height = window.innerHeight;
+            };
+    
+            setCanvasFullScreen();
+    
+            // Sky
+            var sky = cxk.createLinearGradient(0,0,0,canv.height);
+            sky.addColorStop(0, "#3CB1FF");
+            sky.addColorStop(1, "#8FF6FF");
+            cxk.fillStyle = sky;
+            cxk.fillRect(0, 0, canv.width, canv.height);
+            
+            // City
+            // Ground
+            cxk.beginPath();
+            let high_ground = 100;
+            cxk.rect(0, canv.height-high_ground, canv.width, high_ground);
+            cxk.closePath();
+            cxk.fillStyle = "#545F54";
+            cxk.fill();
+
+            // Building
+            function drawBld(x_bld) {
+                cxk.beginPath();
+                let max_high_building = canv.height-250
+                let high_building = Math.floor(Math.random() * max_high_building);
+                cxk.rect(x_bld, canv.height-high_ground*2-high_building, 100, high_ground+high_building);
+                cxk.closePath();
+                cxk.fillStyle = "#808080";
+                cxk.fill();
+                cxk.strokeStyle = "#000000";
+                cxk.stroke()
+                // drawa window
+                cxk.beginPath();
+                for (let y=10;y<high_building+80;y+=20) {
+                    // start point +10 +10
+                    for (let i=10;i<100;i+=25) {
+                        cxk.rect(x_bld+i, canv.height-high_ground*2-high_building+y, 10, 10);
+                        // TIME WINDOW LIGHT
+                        cxk.fillStyle = "#FFFFFF";
+                        cxk.fill();
+                        cxk.closePath();
+                    }
+                }
+            }
+
+            // random building position
+            for (let i=0;i<canv.width;i+=27) {
+                if (Boolean(Math.random() >= 0.7)) {
+                    drawBld(i);
+                }
+            }
+
+            // sun/moon
+            // pos
+            function drawSunMoon(idx_x) {
+                cxk.arc(idx_x, 82, 59, 0, Math.PI*2);
+                cxk.fillStyle = "#FF9510";
+                cxk.fill();
+            }
+            for (let idx_y=0;idx_y<canv.width;idx_y++) {
+                
+            }
+        </script>
+    </body>
+</html>
+
+

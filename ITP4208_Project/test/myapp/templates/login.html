@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}
+{% if request.user.is_authenticated %}
+You're logged in as {{ request.user }}
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-info">Logout</button>
+</form>
+{% else %}
+<h1>PLEASE Login</h1>
+<div class="col-lg-9">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="fieldWrapper">
+            <label for="{{ form.username.id_for_label }}"> Username: </label>
+            {{ form.username | add_class:"form-control" }}
+            {{ form.username.errors }}
+        </div>
+        <div class="fieldWrapper">
+            <label for="{{ form.password.id_for_label }}"> Password : </label>
+            {{ form.password | add_class:"form-control" }}
+            {{ form.password.errors }}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-info"> LOGIN </button>
+        <button type="reset" class="btn btn-info"> RESET </button>
+    </form>
+</div>
+{% endif %}
+{% endblock content %}
