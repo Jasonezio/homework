@@ -51,7 +51,7 @@
             function drawBld() {
                 for (let x_bld=0;x_bld<canv.width;x_bld+=50) {
                     cxk.beginPath();
-                    let max_high_building = canv.height-250
+                    let max_high_building = canv.height-500
                     let high_building = fakeRandomNum(max_high_building, x_bld);
                     cxk.rect(x_bld, canv.height-high_ground*2-high_building, 100, high_ground+high_building);
                     cxk.closePath();
@@ -76,10 +76,16 @@
             }
 
             // sun/moon
-            // pos
-            function drawSunMoon(idx_x) {
+            function drawSunMoon(index) {
+                let x_pos = index*canv.width
+                // calculate 
+                let sin_x = canv.width / Math.PI;
+                // sin_x equal to max high
+                let control_y_idx = 1-(sin_x-canv.height)/canv.height;
+                y_pos = Math.abs((sin_x * Math.sin(x_pos / sin_x) * control_y_idx)-canv.height);
+
                 cxk.beginPath();
-                cxk.arc(idx_x, 82, 59, 0, Math.PI*2);
+                cxk.arc(x_pos, y_pos, 59, 0, Math.PI*2);
                 cxk.fillStyle = "#FF5510";
                 cxk.fill();
                 cxk.closePath();
@@ -88,7 +94,8 @@
             function draw() {
                 cxk.clearRect(0, 0, canv.width, canv.height);
                 drawSkyGround();
-                drawSunMoon(100);
+                drawSunMoon(0.5);
+                
                 drawBld();
                 requestAnimationFrame(draw);
             }
