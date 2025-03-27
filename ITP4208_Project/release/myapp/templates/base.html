@@ -14,6 +14,14 @@
         <script>
             const canv = document.querySelector("canvas");
             const cxk = canv.getContext("2d");
+            const high_ground = 100;
+            const random_seed = new Date().getTime();
+
+            function fakeRandomNum(max_val, step) {
+                let rem = 895421;
+                let tempSeed = (step+1) * random_seed % rem;
+                return Math.floor((tempSeed/rem)*max_val)
+            }
     
             function setCanvasFullScreen() {
                 canv.width = window.innerWidth;
@@ -23,63 +31,70 @@
             setCanvasFullScreen();
     
             // Sky
-            var sky = cxk.createLinearGradient(0,0,0,canv.height);
-            sky.addColorStop(0, "#3CB1FF");
-            sky.addColorStop(1, "#8FF6FF");
-            cxk.fillStyle = sky;
-            cxk.fillRect(0, 0, canv.width, canv.height);
+            function drawSkyGround() {
+                var sky = cxk.createLinearGradient(0,0,0,canv.height);
+                sky.addColorStop(0, "#3CB1FF");
+                sky.addColorStop(1, "#8FF6FF");
+                cxk.fillStyle = sky;
+                cxk.fillRect(0, 0, canv.width, canv.height);
+                
+                // Ground
+                cxk.beginPath();
+                cxk.rect(0, canv.height-high_ground, canv.width, high_ground);
+                cxk.closePath();
+                cxk.fillStyle = "#545F54";
+                cxk.fill();
+            }
             
-            // City
-            // Ground
-            cxk.beginPath();
-            let high_ground = 100;
-            cxk.rect(0, canv.height-high_ground, canv.width, high_ground);
-            cxk.closePath();
-            cxk.fillStyle = "#545F54";
-            cxk.fill();
 
             // Building
-            function drawBld(x_bld) {
-                cxk.beginPath();
-                let max_high_building = canv.height-250
-                let high_building = Math.floor(Math.random() * max_high_building);
-                cxk.rect(x_bld, canv.height-high_ground*2-high_building, 100, high_ground+high_building);
-                cxk.closePath();
-                cxk.fillStyle = "#808080";
-                cxk.fill();
-                cxk.strokeStyle = "#000000";
-                cxk.stroke()
-                // drawa window
-                cxk.beginPath();
-                for (let y=10;y<high_building+80;y+=20) {
-                    // start point +10 +10
-                    for (let i=10;i<100;i+=25) {
-                        cxk.rect(x_bld+i, canv.height-high_ground*2-high_building+y, 10, 10);
-                        // TIME WINDOW LIGHT
-                        cxk.fillStyle = "#FFFFFF";
-                        cxk.fill();
-                        cxk.closePath();
+            function drawBld() {
+                for (let x_bld=0;x_bld<canv.width;x_bld+=50) {
+                    cxk.beginPath();
+                    let max_high_building = canv.height-250
+                    let high_building = fakeRandomNum(max_high_building, x_bld);
+                    cxk.rect(x_bld, canv.height-high_ground*2-high_building, 100, high_ground+high_building);
+                    cxk.closePath();
+                    cxk.fillStyle = "#808080";
+                    cxk.fill();
+                    cxk.strokeStyle = "#000000";
+                    cxk.stroke()
+                    // drawa window
+                    cxk.beginPath();
+                    for (let y=10;y<high_building+80;y+=20) {
+                        // start point +10 +10
+                        for (let i=10;i<100;i+=25) {
+                            cxk.rect(x_bld+i, canv.height-high_ground*2-high_building+y, 10, 10);
+                            // TIME WINDOW LIGHT
+                            cxk.fillStyle = "#FFFFFF";
+                            cxk.fill();
+                            cxk.closePath();
+                        }
                     }
-                }
-            }
-
-            // random building position
-            for (let i=0;i<canv.width;i+=27) {
-                if (Boolean(Math.random() >= 0.7)) {
-                    drawBld(i);
+                    
                 }
             }
 
             // sun/moon
             // pos
             function drawSunMoon(idx_x) {
+                cxk.beginPath();
                 cxk.arc(idx_x, 82, 59, 0, Math.PI*2);
-                cxk.fillStyle = "#FF9510";
+                cxk.fillStyle = "#FF5510";
                 cxk.fill();
+                cxk.closePath();
             }
-            for (let idx_y=0;idx_y<canv.width;idx_y++) {
-                
+
+            function draw() {
+                cxk.clearRect(0, 0, canv.width, canv.height);
+                drawSkyGround();
+                drawSunMoon(100);
+                drawBld();
+                requestAnimationFrame(draw);
             }
+            
+            
+            draw();
         </script>
     </body>
 </html>
