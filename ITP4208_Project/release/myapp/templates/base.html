@@ -3,118 +3,172 @@
 {% comment %} {% include 'include/js.html' %} {% endcomment %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Weather</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-        <style>
-            
-        </style>
-    </head>
-    <body>
-        <canvas></canvas>
-        <script>
-            const canv = document.querySelector("canvas");
-            const cxk = canv.getContext("2d");
-            const high_ground = 50;
-            const random_seed = new Date().getTime();
+<head>
+    <title>Weather</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
 
-            function fakeRandomNum(max_val, step) {
-                let rem = 895421;
-                let tempSeed = (step+1) * random_seed % rem;
-                return Math.floor((tempSeed/rem)*max_val)
-            }
-    
-            function setCanvasNav() {
-                canv.width = window.innerWidth;
-                canv.height = window.innerHeight*0.5;
-            };
-    
+    <style>
+        a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            background-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas style="width: 100%;"></canvas>
+    <script>
+        const canv = document.querySelector("canvas");
+        const cxk = canv.getContext("2d");
+        const high_ground = 50;
+        const random_seed = new Date().getTime();
+
+        function fakeRandomNum(max_val, step) {
+            let rem = 895421;
+            let tempSeed = (step + 1) * random_seed % rem;
+            return Math.floor((tempSeed / rem) * max_val)
+        }
+
+        function setCanvasNav() {
+            canv.width = window.innerWidth;
+            canv.height = window.innerHeight * 0.5;
+        };
+
+        window.onresize = function () {
             setCanvasNav();
-    
-            // Sky
-            function drawSky() {
-                var sky = cxk.createLinearGradient(0,0,0,canv.height);
-                sky.addColorStop(0, "#1CB1FF");
-                sky.addColorStop(1, "#8FF6FF");
-                cxk.fillStyle = sky;
-                cxk.fillRect(0, 0, canv.width, canv.height);
-            }
-            
+        }
+        setCanvasNav();
 
-            // Building
-            function drawBld() {
-                for (let x_bld=0;x_bld<canv.width;x_bld+=50) {
-                    cxk.beginPath();
-                    let max_high_building = canv.height-500
-                    let high_building = fakeRandomNum(max_high_building, x_bld);
-                    cxk.rect(x_bld, canv.height-high_ground*2-high_building, 100, high_ground+high_building);
-                    cxk.closePath();
-                    cxk.fillStyle = "#808080";
-                    cxk.fill();
-                    cxk.strokeStyle = "#000000";
-                    cxk.stroke()
-                    // drawa window
-                    cxk.beginPath();
-                    for (let y=10;y<high_building+80;y+=20) {
-                        // start point +10 +10
-                        for (let i=10;i<100;i+=25) {
-                            cxk.rect(x_bld+i, canv.height-high_ground*2-high_building+y, 10, 10);
-                            // TIME WINDOW LIGHT
-                            cxk.fillStyle = "#FFFFFF";
-                            cxk.fill();
-                            cxk.closePath();
-                        }
-                    }
-                    
-                }
-            }
 
-            // sun/moon
-            function drawSunMoon(index) {
-                let x_pos = index*canv.width
-                // calculate 
-                let sin_x = canv.width / Math.PI;
-                // sin_x equal to max high
-                let control_y_idx = 1-(sin_x-canv.height)/canv.height;
-                y_pos = Math.abs((sin_x * Math.sin(x_pos / sin_x) * control_y_idx)-canv.height);
+        // Sky
+        function drawSky() {
+            var sky = cxk.createLinearGradient(0, 0, 0, canv.height);
+            sky.addColorStop(0, "#1CB1FF");
+            sky.addColorStop(1, "#8FF6FF");
+            cxk.fillStyle = sky;
+            cxk.fillRect(0, 0, canv.width, canv.height);
+        }
 
+
+        // Building
+        function drawBld() {
+            for (let x_bld = 0; x_bld < canv.width; x_bld += 50) {
                 cxk.beginPath();
-                cxk.arc(x_pos, y_pos, 59, 0, Math.PI*2);
-                cxk.fillStyle = "#FF5510";
-                cxk.fill();
+                let max_high_building = canv.height - 500
+                let high_building = fakeRandomNum(max_high_building, x_bld);
+                cxk.rect(x_bld, canv.height - high_ground * 2 - high_building, 100, high_ground + high_building);
                 cxk.closePath();
-            }
+                cxk.fillStyle = "#808080";
+                cxk.fill();
+                cxk.strokeStyle = "#000000";
+                cxk.stroke()
+                // drawa window
+                cxk.beginPath();
+                for (let y = 10; y < high_building + 80; y += 20) {
+                    // start point +10 +10
+                    for (let i = 10; i < 100; i += 25) {
+                        cxk.rect(x_bld + i, canv.height - high_ground * 2 - high_building + y, 10, 10);
+                        // TIME WINDOW LIGHT
+                        cxk.fillStyle = "#FFFFFF";
+                        cxk.fill();
+                        cxk.closePath();
+                    }
+                }
 
-            function draw() {
-                cxk.clearRect(0, 0, canv.width, canv.height);
-                drawSky();
-                drawSunMoon(0.5);
-                
-                // drawBld();
-                requestAnimationFrame(draw);
             }
-            
-            
-            draw();
-        </script>
-        <nav class="navbar bg-primary" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand">Navbar</a>
-                <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
+        }
+
+        // sun/moon
+        function drawSunMoon(index) {
+            let x_pos = index * canv.width
+            // calculate 
+            let sin_x = canv.width / Math.PI;
+            // sin_x equal to max high
+            let control_y_idx = 1 - (sin_x - canv.height) / canv.height;
+            y_pos = Math.abs((sin_x * Math.sin(x_pos / sin_x) * control_y_idx) - canv.height);
+
+            cxk.beginPath();
+            cxk.arc(x_pos, y_pos, 59, 0, Math.PI * 2);
+            cxk.fillStyle = "#FF5510";
+            cxk.fill();
+            cxk.closePath();
+        }
+
+        function draw() {
+            cxk.clearRect(0, 0, canv.width, canv.height);
+            drawSky();
+            drawSunMoon(0.5);
+
+            // drawBld();
+            requestAnimationFrame(draw);
+        }
+
+
+        draw();
+    </script>
+
+    <nav class="navbar" style="background-color: #e3f2fd;" data-bs-theme="dark">
+        <div class="container">
+            <a class="nav-link active navbar-brand" href="#">Home</a>
+            <a class="nav-link active navbar-brand" href="#">My Profiles</a>
+            <a class="nav-link active navbar-brand" href="#">About Us</a>
+            {% if request.user.is_authenticated %}
+                <a>{{ request.user }}</a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-info btn-outline-success">Logout</button>
                 </form>
+
+            {% else %}
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Login
+                </button>
+                
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container-fluid my-5">
+        <div class="bg-body-tertiary p-5 rounded">
+            <div class="col-sm-8 py-5 mx-auto">
+                {% block content %}
+                {% endblock content %}
             </div>
-        </nav>
+        </div>
+    </div>
 
-        {% block content %}
-        {% endblock content %}
-    </body>
+
+</body>
+
 </html>
-
-
