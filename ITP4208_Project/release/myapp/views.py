@@ -9,9 +9,6 @@ def home(request):
         return render(request, "wellcome_page.html")
 
 
-
-
-
 class ViewModelPost(ListView):
         queryset = ModelPost.objects.all()
         template_name = 'list.html'

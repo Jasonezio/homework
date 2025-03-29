@@ -1,20 +1,26 @@
 {% comment %} {% include 'include/nav.html' %} {% endcomment %}
-{% include 'include/css.html' %}
-{% include 'include/js.html' %}
+{% comment %} {% include 'include/css.html' %} {% endcomment %}
+{% comment %} {% include 'include/js.html' %} {% endcomment %}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>W</title>
+        <title>Weather</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+        <style>
+            
+        </style>
     </head>
     <body>
         <canvas></canvas>
-        {% block content %}
-        {% endblock content %}
         <script>
             const canv = document.querySelector("canvas");
             const cxk = canv.getContext("2d");
-            const high_ground = 100;
+            const high_ground = 50;
             const random_seed = new Date().getTime();
 
             function fakeRandomNum(max_val, step) {
@@ -23,27 +29,20 @@
                 return Math.floor((tempSeed/rem)*max_val)
             }
     
-            function setCanvasFullScreen() {
+            function setCanvasNav() {
                 canv.width = window.innerWidth;
-                canv.height = window.innerHeight;
+                canv.height = window.innerHeight*0.5;
             };
     
-            setCanvasFullScreen();
+            setCanvasNav();
     
             // Sky
-            function drawSkyGround() {
+            function drawSky() {
                 var sky = cxk.createLinearGradient(0,0,0,canv.height);
-                sky.addColorStop(0, "#3CB1FF");
+                sky.addColorStop(0, "#1CB1FF");
                 sky.addColorStop(1, "#8FF6FF");
                 cxk.fillStyle = sky;
                 cxk.fillRect(0, 0, canv.width, canv.height);
-                
-                // Ground
-                cxk.beginPath();
-                cxk.rect(0, canv.height-high_ground, canv.width, high_ground);
-                cxk.closePath();
-                cxk.fillStyle = "#545F54";
-                cxk.fill();
             }
             
 
@@ -93,16 +92,28 @@
 
             function draw() {
                 cxk.clearRect(0, 0, canv.width, canv.height);
-                drawSkyGround();
+                drawSky();
                 drawSunMoon(0.5);
                 
-                drawBld();
+                // drawBld();
                 requestAnimationFrame(draw);
             }
             
             
             draw();
         </script>
+        <nav class="navbar bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand">Navbar</a>
+                <form class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+        {% block content %}
+        {% endblock content %}
     </body>
 </html>
 

@@ -35,7 +35,8 @@ urlpatterns = [
 ]
 
 
-# 
+# SUM:https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=SRS&year=2025&rformat=json
+# MOOB:https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=MRS&year=2025&rformat=json
 
 
 
