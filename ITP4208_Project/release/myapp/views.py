@@ -5,8 +5,6 @@ from .models import ModelPost
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse
 # Create your views here.
-def home(request):
-        return render(request, "wellcome_page.html")
 
 
 class ViewModelPost(ListView):
