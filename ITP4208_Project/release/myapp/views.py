@@ -6,6 +6,10 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse
 # Create your views here.
 
+def load_img(request, path):
+    print(path)
+    return HttpResponse(path)
+
 
 class ViewModelPost(ListView):
         queryset = ModelPost.objects.all()
