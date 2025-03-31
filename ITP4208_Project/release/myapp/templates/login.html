@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 <div class="p-5 rounded">
-    <div class="col-sm-8 py-5 mx-auto">
+    <div class="col-sm-8 mx-auto">
         {% if request.user.is_authenticated %}
         You're logged in as {{ request.user }}
         <form action="{% url 'logout' %}" method="post">
@@ -11,9 +11,18 @@
         </form>
         {% else %}
         <h1>LOGIN</h1>
-        <div class="col-lg-9">
+        {% comment %} 控制输入框的宽度 {% endcomment %}
+        <div class="col-lg-6">
             <form action="" method="POST">
                 {% csrf_token %}
+				{% comment %} 异常处理 error feedback {% endcomment %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for err in form.non_field_errors %}
+                        {{ err }}
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <div class="fieldWrapper">
                     <label for="{{ form.username.id_for_label }}"> Username: </label>
                     {{ form.username | add_class:"form-control" }}
@@ -26,10 +35,11 @@
                 </div>
                 <br>
                 <button type="submit" class="btn btn-info"> LOGIN </button>
-                <button type="reset" class="btn btn-info"> RESET </button>
             </form>
         </div>
         {% endif %}
+        <hr class="my-4">
+        <small class="text-body-secondary">New to HKW? <a href="../signup">Sign Up</a></small>
     </div>
 </div>
 

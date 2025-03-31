@@ -24,14 +24,14 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
     url(r'^login/?$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/?$', auth_views.LogoutView.as_view(template_name='home.html'), name='logout'),
-
+    url(r'^signup/?$', signup, name='signup'),
+    
     url(r'^contact/$', TemplateView.as_view(template_name='contact.html'), name='contact'),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'^list/$', ViewModelPost.as_view(), name='list'),
     url(r'^create/$', CreateModelPost.as_view(), name='create'),
     url(r'^update/(?P<id>\d)/$', UpdateModelPost.as_view(), name='update'),
-    url(r'^delete/(?P<pk>\d)/$', DeleteModelPost.as_view(), name='delete'),
-    url(r'^signup/?$', signup, name='signup')
+    url(r'^delete/(?P<pk>\d)/$', DeleteModelPost.as_view(), name='delete')
 ]
 
 

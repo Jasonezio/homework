@@ -1,43 +1,102 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block content %}
-	<div class="col-lg-9">
-		<form action="" method="POST">
+<div class="p-5 rounded">
+    <div class="col-sm-8 mx-auto">
+        {% comment %} 控制输入框的宽度 {% endcomment %}
+        <div class="col-lg-6">
+		{% if request.user.is_authenticated %}
+		You're logged in as {{ request.user }}
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info">Logout</button>
+        </form>
+        {% else %}
+		<h1>SIGN UP</h1>
+		<form action="" method="POST" id="signForm">
 			{% csrf_token %}
 			{{ form.non_field_errors }}
 			<div class="fieldwrapper">
 				<label for="{{ form.username.id_for_label }}">Username:</label>
 				{{ form.username|add_class:"form-control" }}
-				{{ form.username.errors }}
+				{% if form.username.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.username.errors }}</div>
+				{% endif %}
 			</div>
 			<div class="fieldwrapper">
 				<label for="{{ form.password1.id_for_label }}">Password:</label>
 				{{ form.password1|add_class:"form-control" }}
-				{{ form.password1.errors }}
+				{% if form.password1.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.password1.errors }}</div>
+				{% endif %}
 			</div>
 			<div class="fieldwrapper">
 				<label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
 				{{ form.password2|add_class:"form-control" }}
-				{{ form.password2.errors }}
+				{% if form.password2.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.password2.errors }}</div>
+				{% endif %}
 			</div>
 			<div class="fieldwrapper">
 				<label for="{{ form.email.id_for_label }}">Email:</label>
 				{{ form.email|add_class:"form-control" }}
-				{{ form.email.errors }}
+				{% if form.email.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.email.errors }}</div>
+				{% endif %}
 			</div>
 			<div class="fieldwrapper">
 				<label for="{{ form.first_name.id_for_label }}">First name:</label>
 				{{ form.first_name|add_class:"form-control" }}
-				{{ form.first_name.errors }}
+				{% if form.first_name.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.first_name.errors }}</div>
+				{% endif %}
 			</div>
 			<div class="fieldwrapper">
 				<label for="{{ form.last_name.id_for_label }}">Last name:</label>
 				{{ form.last_name|add_class:"form-control" }}
-				{{ form.last_name.errors }}
+				{% if form.last_name.errors %}
+				<div class="alert alert-danger" role="alert">{{ form.last_name.errors }}</div>
+				{% endif %}
 			</div>
 			<br>
-			<button type="submit" class="btn btn-info">SIGN UP</button>
-			<button type="reset" class="btn btn-info">RESET</button>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+				<label class="form-check-label" for="flexCheckDefault">
+					You have read and agree to our Terms of Service and Privacy Policy.
+				</label>
+			</div>
+			<hr class="my-4">
+			<button type="submit" class="btn btn-success">SIGN UP</button>
+			<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#signFormResetConfirm">
+				RESET
+			</button>
+
+			{% comment %} modal {% endcomment %}
+			<div class="modal fade" id="signFormResetConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5">Are you sure?</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Your input will be <mark>cleared</mark>.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-secondary" onclick="confirmReset()">Yes, I want to delete them.</button>
+					</div>
+					</div>
+				</div>
+			</div>
 		</form>
+        {% endif %}
+		</div>
 	</div>
+</div>
+<script>
+	function confirmReset() {
+		$("#signForm").reset();
+	}
+</script>
 {% endblock content %}
