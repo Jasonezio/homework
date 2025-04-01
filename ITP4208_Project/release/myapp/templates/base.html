@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -35,6 +36,15 @@
         const cxk = canv.getContext("2d");
         const high_ground = 50;
         const random_seed = new Date().getTime();
+
+        // getSunTime
+        $.get(
+            "/weather/sun/",
+            function(data) {
+                $("#sunUp").html(data[1]);
+                $("#sunDown").html(data[3]);
+            }
+        );
 
         function fakeRandomNum(max_val, step) {
             let rem = 895421;
@@ -116,24 +126,48 @@
         function draw() {
             cxk.clearRect(0, 0, canv.width, canv.height);
             drawSky();
-            drawSunMoon(0.5);
+            // getDayTime
+            
+            
+            drawSunMoon(0.9);
 
             // drawBld();
             requestAnimationFrame(draw);
         }
-
-
         draw();
+
+        
     </script>
 
+
     <nav class="navbar navbar-expand-lg" style="background-color: #FFFFFF;">
-        <div class="container">
+        <div class="container-fluid">
+            <table style="margin-right: 50px;">
+                <tr>
+                    <td>
+                        <div class="badge text-bg-primary text-wrap" style="width: 6rem;">
+                            <span id="sunUp"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="badge text-bg-danger text-wrap" style="width: 6rem;">
+                            <span id="sunDown"></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            
+            
             <a class="navbar-brand d-inline-flex focus-ring py-1 px-2 text-decoration-none border rounded-2" style="--bs-focus-ring-color: rgba(var(--bs-success-rgb), .25)" href="../">HK Weather</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -192,7 +226,6 @@
         {% block content %}
         {% endblock content %}
     </div>
-
 
 </body>
 

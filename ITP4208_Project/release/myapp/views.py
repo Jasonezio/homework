@@ -1,14 +1,20 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect
-from .models import ModelPost
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from .models import ModelPost, Weather_data
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse
+import datetime
 # Create your views here.
 
 def load_img(request, path):
     print(path)
     return HttpResponse(path)
+
+def get_sun(request):
+    for date in Weather_data.get_sun_time():
+        if datetime.datetime.today().strftime('%Y-%m-%d') == date[0]:
+                return JsonResponse(date, safe=False)
 
 
 class ViewModelPost(ListView):
