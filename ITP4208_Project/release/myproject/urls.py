@@ -16,18 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import re_path as url
 from django.views.generic import TemplateView
-from myapp.views import ViewModelPost, CreateModelPost, UpdateModelPost, DeleteModelPost, load_img, get_sun
+from myapp.views import ViewModelPost, CreateModelPost, UpdateModelPost, DeleteModelPost, get_sun, home_view
 from myapp.register import signup
 from django.contrib.auth import views as auth_views
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^$', home_view, name='home'),
     url(r'^login/?$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/?$', auth_views.LogoutView.as_view(template_name='home.html'), name='logout'),
     url(r'^signup/?$', signup, name='signup'),
 
     url(r'^weather/sun/?$', get_sun),
-    url(r'^assets/image/([a-zA-Z]{1,})/$', load_img),
     
     url(r'^contact/$', TemplateView.as_view(template_name='contact.html'), name='contact'),
     url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),
